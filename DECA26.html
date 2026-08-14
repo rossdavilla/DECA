@@ -1,0 +1,745 @@
+<title>DECA Family Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6B2FB3">
+<style>
+  :root{
+    --accent:#6B2FB3; --accent-2:#8A4FD6; --accent-soft:#F1E9FB; --accent-ink:#4A1E80;
+    --gold:#E8A33D; --gold-soft:#FBF0DC;
+    --no:#D64550; --no-soft:#FCE7E9;
+    --min:#C67A16; --min-soft:#FBF0DC;
+    --event:#6B2FB3; --event-soft:#F1E9FB;
+    --test:#1E8E80; --test-soft:#DDF3F0;
+    --conf:#3168C4; --conf-soft:#E4ECFA;
+    --ground:#FAF8FC; --surface:#FFFFFF; --surface-2:#F4F0F9;
+    --ink:#26203A; --muted:#6C6482; --hair:#E7E1F0;
+    --shadow:0 1px 2px rgba(38,20,70,.06), 0 6px 18px rgba(38,20,70,.06);
+    --tab-h:64px;
+    --safe-b:env(safe-area-inset-bottom,0px);
+    --font-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --font-head:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,sans-serif;
+  }
+  :root:not([data-theme="light"]){ }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --accent:#B794F6; --accent-2:#9A6EE8; --accent-soft:#2A2140; --accent-ink:#D6C2FA;
+      --gold:#F0B95F; --gold-soft:#33291A;
+      --no:#F0808C; --no-soft:#3A1E23;
+      --min:#E6A84E; --min-soft:#332413;
+      --event:#B794F6; --event-soft:#2A2140;
+      --test:#5CC9BB; --test-soft:#12312D;
+      --conf:#7FA6E8; --conf-soft:#182339;
+      --ground:#141019; --surface:#1E1828; --surface-2:#261F35;
+      --ink:#ECE6F6; --muted:#A79FBC; --hair:#302842;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --accent:#B794F6; --accent-2:#9A6EE8; --accent-soft:#2A2140; --accent-ink:#D6C2FA;
+    --gold:#F0B95F; --gold-soft:#33291A;
+    --no:#F0808C; --no-soft:#3A1E23;
+    --min:#E6A84E; --min-soft:#332413;
+    --event:#B794F6; --event-soft:#2A2140;
+    --test:#5CC9BB; --test-soft:#12312D;
+    --conf:#7FA6E8; --conf-soft:#182339;
+    --ground:#141019; --surface:#1E1828; --surface-2:#261F35;
+    --ink:#ECE6F6; --muted:#A79FBC; --hair:#302842;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;line-height:1.5;
+    padding-bottom:calc(var(--tab-h) + var(--safe-b));}
+  h1,h2,h3{font-family:var(--font-head);font-weight:800;letter-spacing:-.01em;text-wrap:balance;margin:0}
+
+  /* Header */
+  .top{position:sticky;top:0;z-index:20;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+    color:#fff;padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 14px;
+    box-shadow:0 2px 14px rgba(38,20,70,.18)}
+  .top .brand{display:flex;align-items:center;gap:11px}
+  .paw{width:38px;height:38px;flex:0 0 auto;background:rgba(255,255,255,.18);border-radius:11px;
+    display:grid;place-items:center;font-size:20px}
+  .top h1{font-size:19px;color:#fff;line-height:1.1}
+  .top .sub{font-size:12.5px;opacity:.85;margin-top:1px}
+  .yearpill{margin-left:auto;font-size:11px;font-weight:700;background:rgba(255,255,255,.16);
+    padding:5px 10px;border-radius:999px;white-space:nowrap}
+
+  /* Views */
+  main{max-width:640px;margin:0 auto;padding:16px 14px 26px}
+  .view{display:none;animation:fade .25s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.view.active{animation:none}}
+
+  .eyebrow{font-family:var(--font-head);font-size:12px;font-weight:800;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--accent-ink);margin:22px 0 10px}
+  .eyebrow:first-child{margin-top:2px}
+
+  .card{background:var(--surface);border:1px solid var(--hair);border-radius:16px;
+    box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+  .card h3{font-size:16px;margin-bottom:2px}
+
+  /* Home hero */
+  .today{background:linear-gradient(150deg,var(--accent) 0%,var(--accent-2) 90%);color:#fff;
+    border:0;border-radius:20px;padding:18px 18px 20px;box-shadow:0 8px 22px rgba(74,30,128,.28);
+    margin-bottom:14px}
+  .today .date{font-size:13px;font-weight:600;opacity:.9;text-transform:uppercase;letter-spacing:.05em}
+  .today .status{font-family:var(--font-head);font-weight:800;font-size:24px;line-height:1.12;margin:6px 0 3px}
+  .today .detail{font-size:14px;opacity:.94}
+  .today .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+  .today .chip{background:rgba(255,255,255,.16);border-radius:11px;padding:8px 11px;font-size:12.5px;
+    display:flex;flex-direction:column;gap:1px;min-width:0}
+  .today .chip b{font-size:14px;font-weight:800;font-family:var(--font-head)}
+  .today .chip span{opacity:.85}
+
+  .glance{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .glance button{font:inherit;text-align:left;cursor:pointer;background:var(--surface);
+    border:1px solid var(--hair);border-radius:15px;padding:14px;box-shadow:var(--shadow);color:var(--ink)}
+  .glance button:active{transform:scale(.98)}
+  .glance .ic{font-size:20px}
+  .glance .lb{font-family:var(--font-head);font-weight:800;font-size:15px;margin-top:6px}
+  .glance .ds{font-size:12px;color:var(--muted);margin-top:1px}
+
+  /* Rows / list items */
+  .row{display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--hair)}
+  .row:first-child{border-top:0}
+  .row .when{flex:0 0 62px;font-weight:700;font-size:13px;font-variant-numeric:tabular-nums;color:var(--accent-ink)}
+  .row .what{flex:1;font-size:14px}
+  .row .what small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
+
+  /* Tags */
+  .tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;
+    padding:2px 7px;border-radius:6px;vertical-align:middle}
+  .t-no{background:var(--no-soft);color:var(--no)}
+  .t-min{background:var(--min-soft);color:var(--min)}
+  .t-event{background:var(--event-soft);color:var(--event)}
+  .t-test{background:var(--test-soft);color:var(--test)}
+  .t-conf{background:var(--conf-soft);color:var(--conf)}
+  .t-info{background:var(--surface-2);color:var(--muted)}
+
+  /* Calendar month blocks */
+  .month{background:var(--surface);border:1px solid var(--hair);border-radius:16px;
+    box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden}
+  .month>h3{padding:13px 16px;font-size:15px;background:var(--surface-2);
+    display:flex;justify-content:space-between;align-items:center}
+  .month>h3 .days{font-size:11px;font-weight:700;color:var(--muted);font-family:var(--font-body);letter-spacing:0}
+  .month .items{padding:4px 16px 8px}
+  .ci{display:flex;gap:11px;padding:10px 0;border-top:1px solid var(--hair)}
+  .ci:first-child{border-top:0}
+  .ci .cd{flex:0 0 52px;font-weight:800;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
+  .ci .cx{flex:1;font-size:14px;line-height:1.35}
+  .ci .cx .tag{margin-top:4px}
+
+  /* Filter chips */
+  .filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .filters button{flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;
+    border:1px solid var(--hair);background:var(--surface);color:var(--muted);
+    padding:7px 13px;border-radius:999px}
+  .filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  .legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--muted);margin:2px 2px 4px}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .dot{width:9px;height:9px;border-radius:3px;display:inline-block}
+
+  /* Schedule timeline */
+  .tl{position:relative;margin:2px 0 2px;padding-left:4px}
+  .tl .tli{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--hair)}
+  .tl .tli:first-child{border-top:0}
+  .tl .tm{flex:0 0 74px;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;color:var(--accent-ink)}
+  .tl .te{flex:1;font-size:14px}
+  .tl .te small{display:block;color:var(--muted);font-size:12px}
+  .tl .tli.hi{background:var(--accent-soft);border-radius:10px;margin:0 -8px;padding:9px 8px}
+
+  /* Dismissal grid */
+  .dis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
+  .dis .d{background:var(--surface-2);border-radius:13px;padding:12px}
+  .dis .d .g{font-family:var(--font-head);font-weight:800;font-size:14px;color:var(--accent-ink)}
+  .dis .d .t{font-size:19px;font-weight:800;font-family:var(--font-head);margin-top:3px;font-variant-numeric:tabular-nums}
+  .dis .d .w{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+  /* generic table */
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tbl th,.tbl td{text-align:left;padding:9px 8px;border-top:1px solid var(--hair);vertical-align:top}
+  .tbl th{font-family:var(--font-head);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;
+    border-top:0}
+  .tbl td:first-child{font-weight:800;color:var(--accent-ink);white-space:nowrap}
+  .tbl .num{font-variant-numeric:tabular-nums}
+
+  .note{display:flex;gap:9px;font-size:13px;background:var(--accent-soft);color:var(--accent-ink);
+    border-radius:12px;padding:11px 13px;margin:10px 0}
+  .note.gold{background:var(--gold-soft);color:var(--min)}
+  .note .ic{flex:0 0 auto}
+
+  /* Menu */
+  .wk{background:var(--surface);border:1px solid var(--hair);border-radius:16px;box-shadow:var(--shadow);
+    margin-bottom:12px;overflow:hidden}
+  .wk>h3{padding:12px 16px;background:var(--surface-2);font-size:14px}
+  .wk .m{display:flex;gap:12px;padding:11px 16px;border-top:1px solid var(--hair)}
+  .wk .m .dw{flex:0 0 74px}
+  .wk .m .dw b{display:block;font-family:var(--font-head);font-size:14px}
+  .wk .m .dw span{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .wk .m .ml{flex:1;font-size:14px;align-self:center}
+  .wk .m.tdy{background:var(--accent-soft)}
+  .wk .m.tdy .dw b{color:var(--accent-ink)}
+
+  .bkfast{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .bkfast .b{background:var(--surface-2);border-radius:12px;padding:11px 12px}
+  .bkfast .b .d{font-family:var(--font-head);font-weight:800;font-size:12px;color:var(--muted);text-transform:uppercase}
+  .bkfast .b .f{font-size:14px;font-weight:600;margin-top:2px}
+
+  /* Events */
+  .ev .ei{display:flex;gap:11px;padding:10px 0;border-top:1px solid var(--hair)}
+  .ev .ei:first-child{border-top:0}
+  .ev .ei .ed{flex:0 0 40px;font-weight:800;font-size:13px;color:var(--accent-ink)}
+  .ev .ei .et{flex:1;font-size:14px}
+  .ev .ei .et .vol{display:inline-block;font-size:10.5px;font-weight:800;color:var(--gold);
+    background:var(--gold-soft);padding:1px 7px;border-radius:6px;margin-top:3px;text-transform:uppercase;letter-spacing:.03em}
+
+  .social{display:flex;gap:10px;margin-top:8px}
+  .social a{flex:1;text-align:center;text-decoration:none;font-weight:700;font-size:13px;
+    background:var(--surface-2);color:var(--ink);border-radius:12px;padding:11px;border:1px solid var(--hair)}
+
+  .contact{font-size:13.5px;color:var(--muted)}
+  .contact a{color:var(--accent);font-weight:700;text-decoration:none}
+
+  .foot{text-align:center;font-size:11.5px;color:var(--muted);padding:22px 10px 6px;line-height:1.5}
+
+  /* Bottom tab bar */
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;
+    background:var(--surface);border-top:1px solid var(--hair);
+    padding-bottom:var(--safe-b);
+    display:grid;grid-template-columns:repeat(5,1fr);
+    box-shadow:0 -2px 16px rgba(38,20,70,.07)}
+  nav.tabs button{font:inherit;cursor:pointer;background:none;border:0;color:var(--muted);
+    height:var(--tab-h);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    padding:0;transition:color .15s}
+  nav.tabs button .ti{font-size:21px;line-height:1;transition:transform .15s}
+  nav.tabs button .tl{font-size:10.5px;font-weight:700;letter-spacing:.01em}
+  nav.tabs button[aria-selected="true"]{color:var(--accent)}
+  nav.tabs button[aria-selected="true"] .ti{transform:translateY(-1px) scale(1.06)}
+  nav.tabs button:active .ti{transform:scale(.9)}
+</style>
+
+<header class="top">
+  <div class="brand">
+    <div class="paw" aria-hidden="true">🐾</div>
+    <div>
+      <h1>DECA Family Hub</h1>
+      <div class="sub">Denair Elementary Charter Academy · Coyotes</div>
+    </div>
+    <div class="yearpill">2026–27</div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ HOME ============ -->
+  <section class="view active" id="v-home" role="tabpanel" aria-label="Home">
+    <div class="today" id="todayCard">
+      <div class="date" id="tDate">—</div>
+      <div class="status" id="tStatus">Loading…</div>
+      <div class="detail" id="tDetail"></div>
+      <div class="chips" id="tChips"></div>
+    </div>
+
+    <div class="glance">
+      <button data-go="schedule"><div class="ic">⏰</div><div class="lb">Bell Schedule</div><div class="ds">Start, recess &amp; dismissal</div></button>
+      <button data-go="menu"><div class="ic">🍽️</div><div class="lb">Lunch Menu</div><div class="ds">Free for every student</div></button>
+      <button data-go="calendar"><div class="ic">📅</div><div class="lb">Calendar</div><div class="ds">Holidays &amp; no-school</div></button>
+      <button data-go="events"><div class="ic">🎉</div><div class="lb">Parent Events</div><div class="ds">Fundraisers &amp; fun</div></button>
+    </div>
+
+    <div class="eyebrow">Coming up</div>
+    <div class="card" style="padding:6px 16px"><div id="upcoming"></div></div>
+
+    <div class="note gold"><span class="ic">💡</span><span>DECA is a <b>minimum day every Wednesday</b> — early dismissal all year.</span></div>
+  </section>
+
+  <!-- ============ CALENDAR ============ -->
+  <section class="view" id="v-calendar" role="tabpanel" aria-label="Calendar" hidden>
+    <div class="eyebrow" style="margin-top:2px">2026–27 School Calendar</div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--no)"></i>No school</span>
+      <span><i class="dot" style="background:var(--min)"></i>Minimum day</span>
+      <span><i class="dot" style="background:var(--event)"></i>DECA event</span>
+      <span><i class="dot" style="background:var(--conf)"></i>Conferences</span>
+      <span><i class="dot" style="background:var(--test)"></i>Testing</span>
+    </div>
+    <div class="filters" id="calFilters">
+      <button data-f="all" aria-pressed="true">All</button>
+      <button data-f="no" aria-pressed="false">No school</button>
+      <button data-f="min" aria-pressed="false">Minimum days</button>
+      <button data-f="event" aria-pressed="false">DECA events</button>
+    </div>
+    <div id="calList"></div>
+    <div class="note"><span class="ic">🏫</span><span>First day of school <b>Aug 12, 2026</b> · Last day <b>May 27, 2027</b> (180 days). All dates from the Denair USD board-approved calendar (approved 6/4/2026).</span></div>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section class="view" id="v-schedule" role="tabpanel" aria-label="Schedule" hidden>
+    <div class="eyebrow" style="margin-top:2px">Daily Bell Schedule</div>
+    <div class="card">
+      <div class="tl" id="morningTL"></div>
+    </div>
+
+    <div class="eyebrow">Dismissal</div>
+    <div class="card">
+      <div class="dis">
+        <div class="d"><div class="g">TK &amp; Kinder</div><div class="t">2:50<span style="font-size:12px"> pm</span></div><div class="w">Wed &amp; min. days 12:40</div></div>
+        <div class="d"><div class="g">1st &amp; 2nd</div><div class="t">3:00<span style="font-size:12px"> pm</span></div><div class="w">Wed &amp; min. days 12:50</div></div>
+        <div class="d"><div class="g">3rd–5th</div><div class="t">3:10<span style="font-size:12px"> pm</span></div><div class="w">Wed &amp; min. days 1:00</div></div>
+        <div class="d" style="background:var(--gold-soft)"><div class="g" style="color:var(--min)">Every Wed</div><div class="t" style="color:var(--min)">Early</div><div class="w">Minimum day all year</div></div>
+      </div>
+    </div>
+
+    <div class="eyebrow">Lunch &amp; Recess by Grade</div>
+    <div class="card" style="padding:8px 12px">
+      <table class="tbl">
+        <thead><tr><th>Grade</th><th>Lunch</th><th>Recess</th></tr></thead>
+        <tbody id="lunchRows"></tbody>
+      </table>
+    </div>
+    <div class="note"><span class="ic">🥞</span><span><b>Free breakfast</b> for all students 8:00–8:25 am in the cafeteria. Be in the cafeteria or lined up at grade cones by 8:15.</span></div>
+  </section>
+
+  <!-- ============ MENU ============ -->
+  <section class="view" id="v-menu" role="tabpanel" aria-label="Menu" hidden>
+    <div class="note gold" style="margin-top:2px"><span class="ic">✅</span><span>Breakfast &amp; lunch are <b>free for every enrolled student</b> (Community Eligibility Program).</span></div>
+
+    <div class="eyebrow">Breakfast · Weekly</div>
+    <div class="card">
+      <div class="bkfast" id="bkfast"></div>
+      <div class="contact" style="margin-top:11px">Served with juice &amp; fresh fruit. Fresh deli sandwiches available daily.</div>
+    </div>
+
+    <div class="eyebrow">Lunch · August 2026</div>
+    <div id="lunchWeeks"></div>
+
+    <div class="card contact">
+      <b style="color:var(--ink);font-family:var(--font-head)">Child Nutrition Services</b><br>
+      1% &amp; fat-free chocolate milk daily · whole-grain products daily.<br>
+      📞 <a href="tel:+12096327514,1243">209-632-7514 ×1243</a><br>
+      <span style="font-size:12px">All menus subject to change.</span>
+    </div>
+  </section>
+
+  <!-- ============ EVENTS ============ -->
+  <section class="view" id="v-events" role="tabpanel" aria-label="Events" hidden>
+    <div class="eyebrow" style="margin-top:2px">DECA Parents Club · Monthly Events</div>
+    <div id="eventList"></div>
+    <div class="card">
+      <h3>Don't miss a thing!</h3>
+      <div class="contact" style="margin:4px 0 2px">Follow DECA Parents Club on social media for updates.</div>
+      <div class="social">
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener">f · Facebook</a>
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener">◎ Instagram</a>
+      </div>
+    </div>
+    <div class="note gold"><span class="ic">📌</span><span>All events &amp; fundraisers are tentative — keep an eye out for updates &amp; more info.</span></div>
+  </section>
+
+  <div class="foot">DECA Family Hub · unofficial parent reference built from the school's 2026–27 documents.<br>Denair Unified School District is an equal opportunity provider.</div>
+</main>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="home"><span class="ti">🏠</span><span class="tl">Home</span></button>
+  <button role="tab" aria-selected="false" data-tab="calendar"><span class="ti">📅</span><span class="tl">Calendar</span></button>
+  <button role="tab" aria-selected="false" data-tab="schedule"><span class="ti">⏰</span><span class="tl">Schedule</span></button>
+  <button role="tab" aria-selected="false" data-tab="menu"><span class="ti">🍽️</span><span class="tl">Menu</span></button>
+  <button role="tab" aria-selected="false" data-tab="events"><span class="ti">🎉</span><span class="tl">Events</span></button>
+</nav>
+
+<script>
+/* ---------- DATA ---------- */
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+// Calendar items grouped by month. type: no | min | event | conf | test | info
+const CAL=[
+ {m:"August 2026",days:"14 days",items:[
+   {d:"12",t:"First Day of School",type:"event"},
+   {d:"19",t:"DMS Back to School Night",type:"min"},
+   {d:"26",t:"DECA Back to School Night",sub:"Minimum day",type:"event"},
+ ]},
+ {m:"September 2026",days:"21 days",items:[
+   {d:"7",t:"Labor Day",sub:"Holiday",type:"no"},
+   {d:"10",t:"DCA Family Night",sub:"Minimum day",type:"min"},
+   {d:"16",t:"Districtwide Collaborative Day",sub:"Minimum day",type:"min"},
+   {d:"23",t:"DECA 1st Trimester Progress Reports",type:"info"},
+ ]},
+ {m:"October 2026",days:"22 days",items:[
+   {d:"2",t:"DHS Homecoming",sub:"Districtwide minimum day",type:"min"},
+   {d:"13–15",t:"DMS Parent Conferences",sub:"Minimum day",type:"conf"},
+   {d:"21",t:"Districtwide Collaborative Day",sub:"Minimum day",type:"min"},
+   {d:"23",t:"DECA End of 1st Trimester",type:"info"},
+   {d:"26–30",t:"DECA Parent Conferences",sub:"Minimum day all week",type:"conf"},
+ ]},
+ {m:"November 2026",days:"15 days",items:[
+   {d:"11",t:"Veterans Day",sub:"Holiday",type:"no"},
+   {d:"23–27",t:"Thanksgiving Break",sub:"No school",type:"no"},
+ ]},
+ {m:"December 2026",days:"14 days",items:[
+   {d:"11",t:"DECA 2nd Trimester Progress Reports",type:"info"},
+   {d:"21–31",t:"Christmas / Winter Break begins",sub:"No school Dec 21 – Jan 1",type:"no"},
+ ]},
+ {m:"January 2027",days:"18 days",items:[
+   {d:"1",t:"New Year's Day",sub:"Holiday",type:"no"},
+   {d:"4",t:"Professional Development Day",sub:"No school for students",type:"no"},
+   {d:"5",t:"Classes Resume",type:"event"},
+   {d:"18",t:"Martin Luther King Jr. Day",sub:"Holiday",type:"no"},
+ ]},
+ {m:"February 2027",days:"18 days",items:[
+   {d:"11",t:"DECA End of 2nd Trimester",type:"info"},
+   {d:"12",t:"Lincoln's Birthday",sub:"Holiday",type:"no"},
+   {d:"15",t:"Presidents' Day",sub:"Holiday",type:"no"},
+   {d:"17",t:"Districtwide Collaborative Day",sub:"Minimum day",type:"min"},
+ ]},
+ {m:"March 2027",days:"19 days",items:[
+   {d:"17",t:"Districtwide Collaborative Day",sub:"Minimum day",type:"min"},
+   {d:"19",t:"DECA 3rd Trimester Progress Reports",type:"info"},
+   {d:"25",t:"District Ag Day",type:"info"},
+   {d:"26",t:"Good Friday",sub:"Board holiday",type:"no"},
+   {d:"29–31",t:"Spring Break begins",sub:"No school Mar 29 – Apr 2",type:"no"},
+   {d:"All month",t:"ELPAC Testing (Mar 1–25)",type:"test"},
+ ]},
+ {m:"April 2027",days:"20 days",items:[
+   {d:"1–2",t:"Spring Break",sub:"No school",type:"no"},
+   {d:"12–30",t:"CAASPP Testing window",type:"test"},
+   {d:"20–23",t:"6th Grade Outdoor Education",type:"info"},
+   {d:"21",t:"Districtwide Collaborative Day",sub:"Minimum day",type:"min"},
+ ]},
+ {m:"May 2027",days:"19 days",items:[
+   {d:"5",t:"DCA Family Night · K-8 Open House",sub:"Minimum day",type:"event"},
+   {d:"6–7",t:"DECA Spring Conferences",sub:"Minimum day",type:"conf"},
+   {d:"25",t:"DCA Promotion Ceremony",type:"event"},
+   {d:"27",t:"Last Day of School",sub:"Minimum day",type:"event"},
+   {d:"31",t:"Memorial Day",sub:"Holiday",type:"no"},
+ ]},
+];
+
+// Special dated facts for the "today" engine (school year 2026-27). ISO yyyy-mm-dd.
+const FIRST_DAY="2026-08-12", LAST_DAY="2027-05-27";
+const NO_SCHOOL=new Set([
+ "2026-09-07","2026-11-11","2026-11-23","2026-11-24","2026-11-25","2026-11-26","2026-11-27",
+ "2026-12-21","2026-12-22","2026-12-23","2026-12-24","2026-12-25","2026-12-28","2026-12-29","2026-12-30","2026-12-31",
+ "2027-01-01","2027-01-04","2027-01-18","2027-02-12","2027-02-15","2027-03-26",
+ "2027-03-29","2027-03-30","2027-03-31","2027-04-01","2027-04-02","2027-05-31",
+]);
+const NO_SCHOOL_LABEL={
+ "2026-09-07":"Labor Day","2026-11-11":"Veterans Day","2027-01-18":"MLK Jr. Day",
+ "2027-02-12":"Lincoln's Birthday","2027-02-15":"Presidents' Day","2027-03-26":"Good Friday",
+ "2027-01-01":"New Year's Day","2027-01-04":"Staff Development Day","2027-05-31":"Memorial Day",
+};
+// Extra minimum days (besides every Wednesday). ISO.
+const MIN_DAYS=new Set([
+ "2026-08-26","2026-09-10","2026-09-16","2026-10-02","2026-10-21",
+ "2026-10-26","2026-10-27","2026-10-28","2026-10-29","2026-10-30",
+ "2027-02-17","2027-03-17","2027-04-21","2027-05-05","2027-05-06","2027-05-07","2027-05-27",
+]);
+
+// Bell schedule morning timeline
+const MORNING=[
+ {t:"8:00–8:25",e:"Free breakfast",s:"All students, in the cafeteria"},
+ {t:"8:15",e:"Backpacks down & play",s:"Dismissed to the playground"},
+ {t:"8:27",e:"Warning bell",s:"Line up in designated areas"},
+ {t:"8:30",e:"Classes begin",s:""},
+ {t:"9:30–10:00",e:"Morning recess",s:"TK"},
+ {t:"9:45–10:00",e:"Morning recess",s:"3rd–4th"},
+ {t:"10:00–10:30",e:"Morning recess",s:"Kinder"},
+ {t:"10:00–10:15",e:"Morning recess",s:"1st–2nd & 5th"},
+];
+// Lunch/recess by grade
+const LUNCH=[
+ {g:"TK",l:"11:05–11:30",r:"11:30–11:50"},
+ {g:"Kinder",l:"11:35–12:00",r:"12:00–12:20"},
+ {g:"1st",l:"11:30–11:55",r:"11:55–12:15"},
+ {g:"2nd",l:"11:20–11:45",r:"11:45–12:05"},
+ {g:"3rd",l:"11:45–12:10",r:"11:25–11:45"},
+ {g:"4th",l:"12:00–12:25",r:"11:40–12:00"},
+ {g:"5th",l:"11:55–12:20",r:"11:35–11:55"},
+];
+// Menu
+const BREAKFAST=[
+ {d:"Mon",f:"Breakfast pastry"},{d:"Tue",f:"Breakfast sandwich"},{d:"Wed",f:"Breakfast burrito"},
+ {d:"Thu",f:"Scrambled eggs & biscuit"},{d:"Fri",f:"Breakfast pizza"},
+];
+const LUNCH_MENU=[
+ {wk:"Week of Aug 10",days:[
+   {d:"Wed",n:"12",iso:"2026-08-12",f:"BBQ chicken with steak fries & WG roll  ·or·  hamburger"},
+   {d:"Thu",n:"13",iso:"2026-08-13",f:"Lasagna roll with WG garlic toast  ·or·  corn dogs"},
+   {d:"Fri",n:"14",iso:"2026-08-14",f:"Pizza  ·or·  chicken & waffles"},
+ ]},
+ {wk:"Week of Aug 17",days:[
+   {d:"Mon",n:"17",iso:"2026-08-17",f:"Grilled cheese or chicken sandwich with baked sweet potato wedges"},
+   {d:"Tue",n:"18",iso:"2026-08-18",f:"Beef tacos with seasoned beans  ·or·  hot dogs"},
+   {d:"Wed",n:"19",iso:"2026-08-19",f:"Meatloaf with mashed potatoes & WG roll  ·or·  hamburger"},
+   {d:"Thu",n:"20",iso:"2026-08-20",f:"Baked chicken with seasoned rice  ·or·  corn dog"},
+   {d:"Fri",n:"21",iso:"2026-08-21",f:"Beef nachos  ·or·  chicken & waffles"},
+ ]},
+ {wk:"Week of Aug 24",days:[
+   {d:"Mon",n:"24",iso:"2026-08-24",f:"Grilled cheese or chicken sandwich with baked sweet potato wedges"},
+   {d:"Tue",n:"25",iso:"2026-08-25",f:"Beef, bean & cheese burritos  ·or·  hot dogs"},
+   {d:"Wed",n:"26",iso:"2026-08-26",f:"Baked mac & cheese with broccoli  ·or·  hamburger"},
+   {d:"Thu",n:"27",iso:"2026-08-27",f:"Orange chicken & rice with carrots  ·or·  corn dog"},
+   {d:"Fri",n:"28",iso:"2026-08-28",f:"Pizza  ·or·  chicken & waffles"},
+ ]},
+];
+// Parents Club events
+const EVENTS=[
+ {m:"August",it:[
+   {d:"12",t:"Limited-Edition Back-to-School Spirit Wear orders begin"},
+   {d:"12",t:"Apple Chick fundraiser begins"},
+   {d:"26",t:"DECA PC Meet & Greet + Spirit Wear sales + Kona Ice fundraiser @ Back to School Night",vol:1},
+   {d:"28",t:"Red Robin fundraiser"},
+ ]},
+ {m:"September",it:[
+   {d:"1",t:"DECA PC Meeting — 6pm in Rm 25"},
+   {d:"9",t:"Back-to-School Spirit Wear orders end · Apple Chick fundraiser ends"},
+   {d:"18",t:"Castle Noz event",vol:1},
+   {d:"End",t:"Limited-Edition Spirit Wear orders sent home"},
+ ]},
+ {m:"October",it:[
+   {d:"1",t:"Limited-Edition Fall Spirit Wear orders begin"},
+   {d:"6",t:"DECA PC Meeting — 6pm in Rm 25"},
+   {d:"7",t:"Chipotle fundraiser — 4pm–8pm"},
+   {d:"14",t:"Fall fundraiser begins"},
+   {d:"22",t:"Fall Spirit Wear orders end"},
+   {d:"28",t:"Apple Chick fundraiser distribution",vol:1},
+ ]},
+ {m:"November",it:[
+   {d:"3",t:"DECA PC Meeting — 6pm in Rm 25 · Fall fundraiser ends"},
+   {d:"4",t:"Applebee's ticket sales begin · Read-A-Thon pledge collection begins"},
+   {d:"17",t:"Read-A-Thon pledge collection ends"},
+   {d:"18–25",t:"Read-A-Thon"},
+   {d:"End",t:"Limited-Edition Spirit Wear orders sent home"},
+ ]},
+ {m:"December",it:[
+   {d:"1",t:"Applebee's ticket sales end · Read-A-Thon pledges due"},
+   {d:"4",t:"Craft Night — 6pm–8pm in DECA Gym",vol:1},
+   {d:"9",t:"Fall fundraiser distribution",vol:1},
+   {d:"12",t:"Applebee's fundraiser — ticket holders only, 8am–10am",vol:1},
+ ]},
+ {m:"January / February",it:[
+   {d:"Jan 5",t:"DECA PC Meeting — 6pm in Rm 25"},
+   {d:"Jan 27",t:"Spring fundraiser begins"},
+   {d:"Jan",t:"Food fundraiser (TBD)"},
+   {d:"Feb 2",t:"DECA PC Meeting — 6pm in Rm 25"},
+   {d:"Feb 5",t:"Panda Express fundraiser"},
+   {d:"Feb 16",t:"Spring fundraiser ends"},
+   {d:"Feb 26",t:"Family Dance — 6pm–8pm in DECA Gym",vol:1},
+ ]},
+ {m:"March",it:[
+   {d:"1–5",t:"DECA VIP / Dr. Seuss Week"},
+   {d:"2",t:"DECA PC Meeting — 6pm in Rm 25"},
+   {d:"17",t:"International Day of the Child, Spirit Wear sales & Yogurt Mill fundraiser — 1:30pm–4:30pm",vol:1},
+   {d:"17",t:"Spring fundraiser distribution · Red Robin fundraiser"},
+   {d:"TBD",t:"Walk-A-Thon pledge collection begins"},
+ ]},
+ {m:"April",it:[
+   {d:"6",t:"DECA PC Meeting — Annual Election of Officers — 6pm in Rm 25"},
+   {d:"TBD",t:"Movie Night @ Gaslight Theater"},
+   {d:"TBD",t:"Walk-A-Thon + pledge collection & pledges due",vol:1},
+   {d:"TBD",t:"Food fundraiser"},
+ ]},
+ {m:"May",it:[
+   {d:"3–7",t:"Book Fair",vol:1},
+   {d:"3–7",t:"Staff Appreciation Week"},
+   {d:"5",t:"Book Fair & Kona Ice fundraiser during DECA Open House"},
+   {d:"4",t:"DECA PC Meeting — 6pm in Rm 25"},
+ ]},
+];
+
+/* ---------- HELPERS ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const TAGLABEL={no:"No school",min:"Minimum day",event:"DECA",conf:"Conferences",test:"Testing",info:"Info"};
+
+/* ---------- RENDER: CALENDAR ---------- */
+function renderCal(filter="all"){
+  const wrap=$("#calList");wrap.innerHTML="";
+  CAL.forEach(mo=>{
+    const items=mo.items.filter(i=>filter==="all"||i.type===filter);
+    if(!items.length)return;
+    const block=el("div","month");
+    block.appendChild(el("h3",null,`${mo.m}<span class="days">${mo.days}</span>`));
+    const list=el("div","items");
+    items.forEach(i=>{
+      const ci=el("div","ci");
+      ci.appendChild(el("div","cd",i.d));
+      const cx=el("div","cx",i.t+(i.sub?`<small style="color:var(--muted);font-size:12px;display:block">${i.sub}</small>`:""));
+      cx.appendChild(el("span","tag t-"+i.type,TAGLABEL[i.type]));
+      ci.appendChild(cx);
+      list.appendChild(ci);
+    });
+    block.appendChild(list);
+    wrap.appendChild(block);
+  });
+  if(!wrap.children.length)wrap.appendChild(el("div","card",'<div class="contact">Nothing in this category.</div>'));
+}
+$("#calFilters").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  [...$("#calFilters").children].forEach(x=>x.setAttribute("aria-pressed",x===b));
+  renderCal(b.dataset.f);
+});
+
+/* ---------- RENDER: SCHEDULE ---------- */
+function renderSchedule(){
+  const tl=$("#morningTL");
+  MORNING.forEach(m=>{
+    const r=el("div","tli");
+    r.appendChild(el("div","tm",m.t));
+    r.appendChild(el("div","te",`${m.e}${m.s?`<small>${m.s}</small>`:""}`));
+    tl.appendChild(r);
+  });
+  const tb=$("#lunchRows");
+  LUNCH.forEach(x=>{
+    const tr=el("tr");
+    tr.appendChild(el("td",null,x.g));
+    tr.appendChild(el("td","num",x.l));
+    tr.appendChild(el("td","num",x.r));
+    tb.appendChild(tr);
+  });
+}
+
+/* ---------- RENDER: MENU ---------- */
+function renderMenu(todayIso){
+  const bk=$("#bkfast");
+  BREAKFAST.forEach(b=>bk.appendChild(el("div","b",`<div class="d">${b.d}</div><div class="f">${b.f}</div>`)));
+  const wrap=$("#lunchWeeks");
+  LUNCH_MENU.forEach(w=>{
+    const c=el("div","wk");
+    c.appendChild(el("h3",null,w.wk));
+    w.days.forEach(d=>{
+      const row=el("div","m"+(d.iso===todayIso?" tdy":""));
+      row.appendChild(el("div","dw",`<b>${d.d}</b><span>Aug ${d.n}</span>`));
+      row.appendChild(el("div","ml",d.f));
+      c.appendChild(row);
+    });
+    wrap.appendChild(c);
+  });
+}
+
+/* ---------- RENDER: EVENTS ---------- */
+function renderEvents(){
+  const wrap=$("#eventList");
+  EVENTS.forEach(mo=>{
+    const c=el("div","card ev");
+    c.appendChild(el("h3",null,mo.m));
+    const box=el("div");
+    mo.it.forEach(i=>{
+      const ei=el("div","ei");
+      ei.appendChild(el("div","ed",i.d));
+      ei.appendChild(el("div","et",i.t+(i.vol?'<span class="vol">🙌 Volunteer</span>':"")));
+      box.appendChild(ei);
+    });
+    c.appendChild(box);
+    wrap.appendChild(c);
+  });
+}
+
+/* ---------- TODAY ENGINE ---------- */
+function weekdayName(d){return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()];}
+function computeToday(){
+  const now=new Date();
+  const t=iso(now), dow=now.getDay();
+  const dateStr=`${weekdayName(now)}, ${MONTHS[now.getMonth()]} ${now.getDate()}`;
+  let status, detail="", chips=[];
+  const beforeYear=t<FIRST_DAY, afterYear=t>LAST_DAY;
+  const isWeekend=(dow===0||dow===6);
+  const isHoliday=NO_SCHOOL.has(t);
+  const isSchoolDay=!beforeYear&&!afterYear&&!isWeekend&&!isHoliday;
+
+  if(beforeYear){
+    const first=new Date(2026,7,12);
+    const days=Math.ceil((first-now)/(1000*60*60*24));
+    status="Summer break ☀️";
+    detail=days>0?`First day of school is in ${days} day${days>1?"s":""} — Aug 12, 2026.`:"School starts soon!";
+  }else if(afterYear){
+    status="Summer break ☀️";
+    detail="The 2026–27 school year has wrapped up. Have a great summer!";
+  }else if(isWeekend){
+    status="Weekend — no school 🎈";
+    detail="Enjoy the day off!";
+  }else if(isHoliday){
+    status="No school today 🚫";
+    detail=(NO_SCHOOL_LABEL[t]||"Holiday / break")+" — campus closed.";
+  }else{
+    const isMin=(dow===3)||MIN_DAYS.has(t);
+    status=isMin?"Minimum day today ⏰":"School day 🎒";
+    // dismissal
+    const dis=isMin
+      ? "TK/K 12:40 · 1st–2nd 12:50 · 3rd–5th 1:00"
+      : "TK/K 2:50 · 1st–2nd 3:00 · 3rd–5th 3:10";
+    detail=(isMin?(dow===3?"It's Wednesday — early dismissal. ":"Early dismissal today. "):"")+"Classes 8:30"+(isMin?"":"")+".";
+    chips.push({b:"8:30 am",s:"Classes begin"});
+    chips.push({b:isMin?"Early":"Regular",s:"Dismissal — "+dis});
+    // today's lunch
+    let lunch=null;
+    LUNCH_MENU.forEach(w=>w.days.forEach(d=>{if(d.iso===t)lunch=d.f;}));
+    if(lunch)chips.push({b:"Lunch",s:lunch});
+    else chips.push({b:BREAKFAST[dow-1]?BREAKFAST[dow-1].f:"Breakfast",s:"Free breakfast 8:00–8:25"});
+  }
+
+  $("#tDate").textContent=dateStr;
+  $("#tStatus").textContent=status;
+  $("#tDetail").textContent=detail;
+  const cc=$("#tChips");cc.innerHTML="";
+  chips.forEach(c=>cc.appendChild(el("div","chip",`<b>${c.b}</b><span>${c.s}</span>`)));
+
+  return t;
+}
+
+/* ---------- UPCOMING (Home) ---------- */
+function renderUpcoming(){
+  const now=new Date(), t=iso(now);
+  // flatten calendar into rough dated markers using first day number + month
+  const monthIdx={"August 2026":[2026,7],"September 2026":[2026,8],"October 2026":[2026,9],"November 2026":[2026,10],
+   "December 2026":[2026,11],"January 2027":[2027,0],"February 2027":[2027,1],"March 2027":[2027,2],
+   "April 2027":[2027,3],"May 2027":[2027,4]};
+  const flat=[];
+  CAL.forEach(mo=>{
+    const mi=monthIdx[mo.m];if(!mi)return;
+    mo.items.forEach(i=>{
+      const dnum=parseInt(String(i.d).match(/\d+/)?.[0]||"1",10);
+      const dt=new Date(mi[0],mi[1],dnum);
+      flat.push({dt,iso:iso(dt),label:i.t,type:i.type,sub:i.sub,disp:`${MONTHS[mi[1]].slice(0,3)} ${i.d}`});
+    });
+  });
+  const up=flat.filter(x=>x.iso>=t).sort((a,b)=>a.dt-b.dt).slice(0,5);
+  const box=$("#upcoming");box.innerHTML="";
+  const list=(up.length?up:flat.slice(-5));
+  list.forEach(x=>{
+    const r=el("div","row");
+    r.appendChild(el("div","when",x.disp));
+    r.appendChild(el("div","what",`${x.label} <span class="tag t-${x.type}" style="margin-left:2px">${TAGLABEL[x.type]}</span>${x.sub?`<small>${x.sub}</small>`:""}`));
+    box.appendChild(r);
+  });
+  if(!list.length)box.appendChild(el("div","row",'<div class="what">No upcoming items.</div>'));
+}
+
+/* ---------- TAB NAV ---------- */
+const VIEWS=["home","calendar","schedule","menu","events"];
+function go(name){
+  VIEWS.forEach(v=>{
+    const sec=$("#v-"+v), on=v===name;
+    sec.classList.toggle("active",on);
+    sec.hidden=!on;
+  });
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+  window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+}
+document.querySelector("nav.tabs").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(b)go(b.dataset.tab);
+});
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+
+/* ---------- INIT ---------- */
+const todayIso=computeToday();
+renderCal();
+renderSchedule();
+renderMenu(todayIso);
+renderEvents();
+renderUpcoming();
+</script>
