@@ -209,6 +209,51 @@
 
   .foot{text-align:center;font-size:11.5px;color:var(--muted);padding:22px 10px 6px;line-height:1.5}
 
+  /* Classmates button */
+  .matesBtn{width:100%;font:inherit;cursor:pointer;color:#fff;border:0;border-radius:16px;
+    margin-top:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+    box-shadow:0 6px 18px rgba(74,30,128,.24)}
+  .matesBtn:active{transform:scale(.99)}
+  .matesBtn .mi{font-size:22px}
+  .matesBtn .ml{font-family:var(--font-head);font-weight:800;font-size:16px}
+  .matesBtn .mc{margin-left:auto;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.2);
+    padding:4px 10px;border-radius:999px}
+  :root[data-theme="dark"] .matesBtn{color:#1a1030}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .matesBtn{color:#1a1030}}
+
+  /* Classmates modal (bottom sheet) */
+  .modal{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+  .modal[hidden]{display:none}
+  .modal .backdrop{position:absolute;inset:0;background:rgba(20,10,40,.5);animation:fadeBg .25s ease}
+  @keyframes fadeBg{from{opacity:0}to{opacity:1}}
+  .sheet{position:relative;background:var(--surface);width:100%;max-width:640px;
+    border-radius:22px 22px 0 0;box-shadow:0 -10px 44px rgba(20,10,40,.4);
+    padding:6px 16px calc(18px + var(--safe-b));max-height:84vh;overflow-y:auto;
+    animation:slideUp .3s cubic-bezier(.22,1,.36,1)}
+  @media (prefers-reduced-motion:reduce){.sheet,.modal .backdrop{animation:none}}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+  .grab{width:38px;height:4px;border-radius:999px;background:var(--hair);margin:8px auto 4px}
+  .sheetHead{display:flex;align-items:flex-start;gap:12px;padding:6px 2px 12px}
+  .sheetHead h2{font-family:var(--font-head);font-size:20px;font-weight:800}
+  .sheetSub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .sheetHead .x{margin-left:auto;flex:0 0 auto;width:34px;height:34px;border-radius:50%;
+    border:0;cursor:pointer;background:var(--surface-2);color:var(--muted);font-size:15px;line-height:1}
+  .sheetHead .x:active{transform:scale(.9)}
+  .mateList{list-style:none;margin:0;padding:0;counter-reset:m}
+  .mateList li{counter-increment:m;display:flex;align-items:center;gap:12px;
+    padding:12px 6px;border-top:1px solid var(--hair);font-size:16px}
+  .mateList li:first-child{border-top:0}
+  .mateList li::before{content:counter(m);flex:0 0 26px;font-size:12px;font-weight:700;
+    color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+  .mateList li .av{flex:0 0 auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+    background:var(--accent-soft);color:var(--accent-ink);font-family:var(--font-head);font-weight:800;font-size:14px}
+  .mateList li .nm{font-weight:600}
+  .mateList li.me{background:var(--accent-soft);border-radius:12px;margin:2px -6px;padding:12px}
+  .mateList li.me .nm{color:var(--accent-ink);font-weight:800}
+  .mateList li.me .you{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;
+    color:#fff;background:var(--accent);padding:2px 8px;border-radius:999px;margin-left:auto}
+
   /* Bottom tab bar */
   nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;
     background:var(--surface);border-top:1px solid var(--hair);
@@ -257,6 +302,12 @@
     <div class="card" style="padding:6px 16px"><div id="upcoming"></div></div>
 
     <div class="note gold"><span class="ic">💡</span><span>DECA is a <b>minimum day every Wednesday</b> — early dismissal all year.</span></div>
+
+    <button class="matesBtn" id="openMates" aria-haspopup="dialog">
+      <span class="mi">👥</span>
+      <span class="ml">Classmates</span>
+      <span class="mc" id="mateCount"></span>
+    </button>
   </section>
 
   <!-- ============ CALENDAR ============ -->
@@ -352,6 +403,22 @@
   <button role="tab" aria-selected="false" data-tab="menu"><span class="ti">🍽️</span><span class="tl">Menu</span></button>
   <button role="tab" aria-selected="false" data-tab="events"><span class="ti">🎉</span><span class="tl">Events</span></button>
 </nav>
+
+<!-- ============ CLASSMATES MODAL ============ -->
+<div class="modal" id="matesModal" hidden>
+  <div class="backdrop" id="matesBackdrop"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="matesTitle">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheetHead">
+      <div>
+        <h2 id="matesTitle">Nathaniel's Class</h2>
+        <div class="sheetSub" id="matesSub"></div>
+      </div>
+      <button class="x" id="matesClose" aria-label="Close">✕</button>
+    </div>
+    <ol class="mateList" id="mateList"></ol>
+  </div>
+</div>
 
 <script>
 /* ---------- DATA ---------- */
@@ -750,6 +817,40 @@ document.querySelector("nav.tabs").addEventListener("click",e=>{
 });
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
 
+/* ---------- CLASSMATES ---------- */
+const STUDENT="Nathaniel";
+const CLASSMATES=["Janetzi","Mia","Nathaniel","Ayden","Brielle","Olivia","Savannah","Kennedy",
+ "Leah","Malaya","Aliyah","Matthew","Elijah","Leonardo","Zoey","Amelia","Elise","Landon"];
+function renderMates(){
+  const sorted=[...CLASSMATES].sort((a,b)=>a.localeCompare(b));
+  const ol=$("#mateList");ol.innerHTML="";
+  sorted.forEach(name=>{
+    const me=name===STUDENT;
+    const li=el("li",me?"me":null,
+      `<span class="av">${name[0]}</span><span class="nm">${name}</span>${me?'<span class="you">⭐ My child</span>':""}`);
+    ol.appendChild(li);
+  });
+  $("#mateCount").textContent=sorted.length;
+  $("#matesSub").textContent=`${sorted.length} students · A–Z`;
+}
+const modal=$("#matesModal");
+let lastFocus=null;
+function openMates(){
+  lastFocus=document.activeElement;
+  modal.hidden=false;
+  document.body.style.overflow="hidden";
+  $("#matesClose").focus();
+}
+function closeMates(){
+  modal.hidden=true;
+  document.body.style.overflow="";
+  if(lastFocus)lastFocus.focus();
+}
+$("#openMates").addEventListener("click",openMates);
+$("#matesClose").addEventListener("click",closeMates);
+$("#matesBackdrop").addEventListener("click",closeMates);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!modal.hidden)closeMates();});
+
 /* ---------- INIT ---------- */
 const todayIso=computeToday();
 renderCal();
@@ -757,4 +858,5 @@ renderSchedule();
 renderMenu(todayIso);
 renderEvents();
 renderUpcoming();
+renderMates();
 </script>
