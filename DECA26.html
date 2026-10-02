@@ -186,6 +186,9 @@
   .wk .m.tdy .dw b{color:var(--accent-ink)}
   .wk .m.off .ml{color:var(--no);font-weight:700}
   .wk .m.off .dw b{color:var(--no)}
+  .wk .m.fun{background:var(--gold-soft)}
+  .wk .m.fun .ml{color:var(--min);font-weight:700}
+  .wk .m.fun .dw b{color:var(--min)}
 
   .bkfast{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .bkfast .b{background:var(--surface-2);border-radius:12px;padding:11px 12px}
@@ -367,7 +370,7 @@
       <div class="contact" style="margin-top:11px">Served with juice &amp; fresh fruit. Fresh deli sandwiches available daily.</div>
     </div>
 
-    <div class="eyebrow">Lunch · September 2026</div>
+    <div class="eyebrow">Lunch · October 2026</div>
     <div id="lunchWeeks"></div>
 
     <div class="card contact">
@@ -531,40 +534,40 @@ const LUNCH=[
 // Menu
 const BREAKFAST=[
  {d:"Mon",f:"Breakfast pastry"},{d:"Tue",f:"Breakfast sandwich"},{d:"Wed",f:"Breakfast burrito"},
- {d:"Thu",f:"Scrambled eggs & biscuit"},{d:"Fri",f:"Breakfast pizza"},
+ {d:"Thu",f:"Combo bar or breakfast nuggets"},{d:"Fri",f:"Breakfast pizza"},
 ];
 const LUNCH_MENU=[
- {wk:"Week of Sep 1",days:[
-   {d:"Tue",mon:"Sep",n:"1",iso:"2026-09-01",f:"Beef tacos with seasoned beans  ·or·  hot dogs"},
-   {d:"Wed",mon:"Sep",n:"2",iso:"2026-09-02",f:"BBQ chicken with baked fries & WG roll  ·or·  hamburger"},
-   {d:"Thu",mon:"Sep",n:"3",iso:"2026-09-03",f:"Cheese ravioli with WG garlic toast  ·or·  corn dogs"},
-   {d:"Fri",mon:"Sep",n:"4",iso:"2026-09-04",f:"Beef nachos  ·or·  chicken & waffles"},
+ {wk:"Week of Oct 1",days:[
+   {d:"Thu",mon:"Oct",n:"1",iso:"2026-10-01",f:"Baked chicken with rice  ·or·  corn dog"},
+   {d:"Fri",mon:"Oct",n:"2",iso:"2026-10-02",f:"🎉 Homecoming Parade — Deli Picnic Day!",fun:1},
  ]},
- {wk:"Week of Sep 7",days:[
-   {d:"Mon",mon:"Sep",n:"7",iso:"2026-09-07",f:"🇺🇸 No school — Labor Day",off:1},
-   {d:"Tue",mon:"Sep",n:"8",iso:"2026-09-08",f:"Chicken enchiladas with seasoned beans  ·or·  hot dog"},
-   {d:"Wed",mon:"Sep",n:"9",iso:"2026-09-09",f:"Meatloaf with mashed potatoes & WG roll  ·or·  hamburger"},
-   {d:"Thu",mon:"Sep",n:"10",iso:"2026-09-10",f:"Chicken alfredo with broccoli & WG roll  ·or·  corn dog"},
-   {d:"Fri",mon:"Sep",n:"11",iso:"2026-09-11",f:"Pizza  ·or·  chicken & waffles"},
+ {wk:"Week of Oct 5",days:[
+   {d:"Mon",mon:"Oct",n:"5",iso:"2026-10-05",f:"Grilled cheese or chicken sandwich with sweet potato fries"},
+   {d:"Tue",mon:"Oct",n:"6",iso:"2026-10-06",f:"Beef tacos with seasoned beans  ·or·  hot dogs"},
+   {d:"Wed",mon:"Oct",n:"7",iso:"2026-10-07",f:"Mac & cheese with broccoli  ·or·  hamburger"},
+   {d:"Thu",mon:"Oct",n:"8",iso:"2026-10-08",f:"Sunny Day chicken & pasta with WG roll & broccoli  ·or·  corn dog"},
+   {d:"Fri",mon:"Oct",n:"9",iso:"2026-10-09",f:"Pizza  ·or·  chicken & waffles"},
  ]},
- {wk:"Week of Sep 14",days:[
-   {d:"Mon",mon:"Sep",n:"14",iso:"2026-09-14",f:"Grilled cheese or chicken sandwich with sweet potato fries"},
-   {d:"Tue",mon:"Sep",n:"15",iso:"2026-09-15",f:"Beef, bean & cheese burritos  ·or·  hot dogs"},
-   {d:"Wed",mon:"Sep",n:"16",iso:"2026-09-16",f:"Baked mac & cheese with broccoli  ·or·  hamburger"},
-   {d:"Thu",mon:"Sep",n:"17",iso:"2026-09-17",f:"Spaghetti with WG roll & broccoli  ·or·  corn dog"},
-   {d:"Fri",mon:"Sep",n:"18",iso:"2026-09-18",f:"Beef nachos  ·or·  chicken & waffles"},
+ {wk:"Week of Oct 12",days:[
+   {d:"Mon",mon:"Oct",n:"12",iso:"2026-10-12",f:"Grilled cheese or chicken sandwich with sweet potato fries"},
+   {d:"Tue",mon:"Oct",n:"13",iso:"2026-10-13",f:"Chicken fiesta bowl with rice & beans  ·or·  hot dog"},
+   {d:"Wed",mon:"Oct",n:"14",iso:"2026-10-14",f:"Meatloaf with mashed potatoes & WG roll  ·or·  hamburger"},
+   {d:"Thu",mon:"Oct",n:"15",iso:"2026-10-15",f:"Chicken alfredo with broccoli & WG roll  ·or·  corn dog"},
+   {d:"Fri",mon:"Oct",n:"16",iso:"2026-10-16",f:"Beef nachos  ·or·  chicken & waffles"},
  ]},
- {wk:"Week of Sep 21",days:[
-   {d:"Mon",mon:"Sep",n:"21",iso:"2026-09-21",f:"Grilled cheese or chicken sandwich with sweet potato fries"},
-   {d:"Tue",mon:"Sep",n:"22",iso:"2026-09-22",f:"Beef tacos with seasoned beans  ·or·  hot dogs"},
-   {d:"Wed",mon:"Sep",n:"23",iso:"2026-09-23",f:"Salisbury steak with mashed potatoes & WG roll  ·or·  hamburger"},
-   {d:"Thu",mon:"Sep",n:"24",iso:"2026-09-24",f:"Lasagna roll with WG roll & broccoli  ·or·  corn dog"},
-   {d:"Fri",mon:"Sep",n:"25",iso:"2026-09-25",f:"Pizza  ·or·  chicken & waffles"},
+ {wk:"Week of Oct 19",days:[
+   {d:"Mon",mon:"Oct",n:"19",iso:"2026-10-19",f:"Grilled cheese or chicken sandwich with sweet potato fries"},
+   {d:"Tue",mon:"Oct",n:"20",iso:"2026-10-20",f:"Beef, bean & cheese burritos  ·or·  hot dogs"},
+   {d:"Wed",mon:"Oct",n:"21",iso:"2026-10-21",f:"BBQ chicken wings with baked fries & WG roll  ·or·  hamburger"},
+   {d:"Thu",mon:"Oct",n:"22",iso:"2026-10-22",f:"Howlin' Coyote chicken & WG noodles with mixed vegetables  ·or·  corn dog"},
+   {d:"Fri",mon:"Oct",n:"23",iso:"2026-10-23",f:"Pizza  ·or·  chicken & waffles"},
  ]},
- {wk:"Week of Sep 28",days:[
-   {d:"Mon",mon:"Sep",n:"28",iso:"2026-09-28",f:"Grilled cheese or chicken sandwich with sweet potato fries"},
-   {d:"Tue",mon:"Sep",n:"29",iso:"2026-09-29",f:"Chicken enchiladas with seasoned beans  ·or·  hot dog"},
-   {d:"Wed",mon:"Sep",n:"30",iso:"2026-09-30",f:"Roasted chicken with mashed potatoes & WG roll  ·or·  hamburger"},
+ {wk:"Week of Oct 26",days:[
+   {d:"Mon",mon:"Oct",n:"26",iso:"2026-10-26",f:"Grilled cheese or chicken sandwich with sweet potato fries"},
+   {d:"Tue",mon:"Oct",n:"27",iso:"2026-10-27",f:"Beef tacos with seasoned beans  ·or·  hot dogs"},
+   {d:"Wed",mon:"Oct",n:"28",iso:"2026-10-28",f:"Star's Howlin' Burger steak with mashed potatoes & WG roll  ·or·  hamburger"},
+   {d:"Thu",mon:"Oct",n:"29",iso:"2026-10-29",f:"Cheese ravioli with WG garlic toast  ·or·  corn dogs"},
+   {d:"Fri",mon:"Oct",n:"30",iso:"2026-10-30",f:"Beef nachos  ·or·  chicken & waffles"},
  ]},
 ];
 // Parents Club events
@@ -694,7 +697,7 @@ function renderMenu(todayIso){
     const c=el("div","wk");
     c.appendChild(el("h3",null,w.wk));
     w.days.forEach(d=>{
-      const row=el("div","m"+(d.iso===todayIso?" tdy":"")+(d.off?" off":""));
+      const row=el("div","m"+(d.iso===todayIso?" tdy":"")+(d.off?" off":"")+(d.fun?" fun":""));
       row.appendChild(el("div","dw",`<b>${d.d}</b><span>${d.mon||"Aug"} ${d.n}</span>`));
       row.appendChild(el("div","ml",d.f));
       c.appendChild(row);
